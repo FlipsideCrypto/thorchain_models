@@ -1,8 +1,8 @@
 {% macro run_sp_create_prod_clone() %}
     {% set clone_query %}
-    call algorand._internal.create_prod_clone(
-        'algorand',
-        'algorand_dev',
+    call thorchain._internal.create_prod_clone(
+        'thorchain',
+        'thorchain_dev',
         'internal_dev'
     );
 {% endset %}
