@@ -1,11 +1,26 @@
-Welcome to your new dbt project!
+## Profile Set Up
 
-### Using the starter project
+#### Use the following within profiles.yml 
+----
 
-Try running the following commands:
-- dbt run
-- dbt test
-
+```yml
+thorchain:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: <ACCOUNT>
+      role: <ROLE>
+      user: <USERNAME>
+      password: <PASSWORD>
+      region: <REGION>
+      database: THORCHAIN_DEV
+      warehouse: <WAREHOUSE>
+      schema: silver
+      threads: 4
+      client_session_keep_alive: False
+      query_tag: <TAG>
+```
 
 ### Resources:
 - Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
