@@ -1,0 +1,38 @@
+version: 2
+models:
+  - name: silver__add_events
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - EVENT_ID
+            - TX_ID
+            - BLOCKCHAIN
+            - POOL_NAME
+            - FROM_ADDRESS
+            - TO_ADDRESS
+            - MEMO
+    columns:
+      - name: TX_ID
+        tests:
+          - not_null
+      - name: FROM_ADDRESS
+        tests:
+          - not_null
+      - name: TO_ADDRESS
+        tests:
+          - not_null
+      - name: ASSET_E8
+        tests:
+          - not_null
+      - name: MEMO
+        tests:
+          - not_null
+      - name: RUNE_E8
+        tests:
+          - not_null
+      - name: POOL_NAME
+        tests:
+          - not_null
+      - name: BLOCK_TIMESTAMP
+        tests:
+          - not_null
