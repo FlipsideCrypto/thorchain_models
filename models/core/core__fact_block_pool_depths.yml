@@ -1,7 +1,7 @@
 version: 2
 models:
   - name: core__fact_block_pool_depths
-    description: "Fact table containing pol depths"
+    description: "Fact table containing all the available pools and its rune/asset depth at each block interval"
     columns:
       - name: FACT_POOL_DEPTHS_ID
         description: "{{ doc('sk') }}"
@@ -16,7 +16,8 @@ models:
       - name: DIM_BLOCK_ID
         description: "FK to DIM_BLOCK table"
         tests:
-          - negative_one
+          - negative_one:
+              where: _inserted_timestamp <  (CURRENT_TIMESTAMP - INTERVAL '8 HOURS')
       - name: RUNE_E8
         description: "The rune depth for this pool at this block"
         tests:

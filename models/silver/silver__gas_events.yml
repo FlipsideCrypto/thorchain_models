@@ -1,24 +1,25 @@
 version: 2
 models:
-  - name: silver__block_pool_depths
+  - name: silver__gas_events
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
+            - EVENT_ID
+            - ASSET
             - BLOCK_TIMESTAMP
-            - POOL_NAME
     columns:
       - name: BLOCK_TIMESTAMP
         tests:
           - not_null
-      - name: POOL_NAME
-        tests:
-          - not_null
-      - name: ASSET_E8
+      - name: ASSET
         tests:
           - not_null
       - name: RUNE_E8
         tests:
           - not_null
-      - name: SYNTH_E8
+      - name: TX_COUNT
+        tests:
+          - not_null
+      - name: ASSET_E8
         tests:
           - not_null

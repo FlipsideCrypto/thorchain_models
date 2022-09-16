@@ -16,7 +16,8 @@ models:
       - name: DIM_BLOCK_ID
         description: "FK to DIM_BLOCK table"
         tests:
-          - negative_one
+          - negative_one:
+              where: _inserted_timestamp <  (CURRENT_TIMESTAMP - INTERVAL '8 HOURS')
       - name: ASSET
         description: "{{ doc('asset') }}"
         tests:
