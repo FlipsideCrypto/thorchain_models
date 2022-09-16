@@ -1,6 +1,6 @@
 {{ config(
   materialized = 'incremental',
-  unique_key = 'fact_add_events_id',
+  unique_key = 'fact_asgard_fund_yggdrasil_events_id',
   incremental_strategy = 'merge',
   cluster_by = ['block_timestamp::DATE']
 ) }}
@@ -8,35 +8,24 @@
 WITH base AS (
 
   SELECT
-    e.block_timestamp,
-    e.tx_id,
-    e.rune_e8,
-    e.blockchain,
-    e.asset_e8,
-    e.pool_name,
-    e.memo,
-    e.to_address,
-    e.from_address,
-    e.asset,
+    tx_id,
+    asset,
+    asset_e8,
+    vault_key,
+    event_id,
+    block_timestamp,
     concat_ws(
       '-',
       event_id :: STRING,
       tx_id :: STRING,
-      blockchain :: STRING,
-      from_address :: STRING,
-      to_address :: STRING,
-      COALESCE(
-        asset :: STRING,
-        ''
-      ),
-      memo :: STRING,
-      pool_name :: STRING,
+      asset :: STRING,
+      asset_e8 :: STRING,
+      vault_key :: STRING,
       block_timestamp :: STRING
     ) AS _unique_key,
     _inserted_timestamp
   FROM
-    {{ ref('silver__add_events') }}
-    e
+    {{ ref('silver__asgard_fund_yggdrasil_events') }}
 
 {% if is_incremental() %}
 WHERE
@@ -53,21 +42,16 @@ WHERE
 SELECT
   {{ dbt_utils.surrogate_key(
     ['a._unique_key']
-  ) }} AS fact_add_events_id,
+  ) }} AS fact_asgard_fund_yggdrasil_events_id,
   b.block_timestamp,
   COALESCE(
     b.dim_block_id,
     '-1'
   ) AS dim_block_id,
-  A.tx_id,
-  A.rune_e8,
-  A.blockchain,
-  A.asset_e8,
-  A.pool_name,
-  A.memo,
-  A.to_address,
-  A.from_address,
   A.asset,
+  A.tx_id,
+  A.vault_key,
+  A.asset_e8,
   A._inserted_timestamp,
   '{{ env_var("DBT_CLOUD_RUN_ID", "manual") }}' AS _audit_run_id
 FROM

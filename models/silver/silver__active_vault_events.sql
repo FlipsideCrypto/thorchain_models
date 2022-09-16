@@ -20,4 +20,4 @@ FROM
   {{ ref('bronze__active_vault_events') }}
   qualify(ROW_NUMBER() over(PARTITION BY event_id
 ORDER BY
-  __HEVO__INGESTED_AT DESC)) = 1
+  __HEVO__LOADED_AT DESC)) = 1
