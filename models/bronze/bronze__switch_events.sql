@@ -3,11 +3,10 @@
 ) }}
 
 SELECT
-  tx,
   COALESCE(
-    chain,
+    tx,
     ''
-  ) AS chain,
+  ) AS tx,
   COALESCE(
     from_addr,
     ''
@@ -17,24 +16,19 @@ SELECT
     ''
   ) AS to_addr,
   COALESCE(
-    asset,
+    burn_asset,
     ''
-  ) AS asset,
-  asset_e8,
-  COALESCE(
-    memo,
-    ''
-  ) AS memo,
-  COALESCE(
-    bond_type,
-    ''
-  ) AS bond_type,
-  e8,
+  ) AS burn_asset,
+  burn_e8,
+  mint_e8,
   block_timestamp,
-  event_id,
+  __HEVO_XMIN,
+  __HEVO__DATABASE_NAME,
+  __HEVO__SCHEMA_NAME,
+  __HEVO__INGESTED_AT,
   __HEVO__LOADED_AT
 FROM
   {{ source(
     'thorchain_midgard',
-    'midgard_bond_events'
+    'midgard_switch_events'
   ) }}
