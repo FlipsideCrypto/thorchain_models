@@ -1,0 +1,19 @@
+version: 2
+models:
+  - name: silver__fee_events
+    columns:
+      - name: BLOCK_TIMESTAMP
+        tests:
+          - not_null
+      - name: TX_ID
+        tests:
+          - not_null
+      - name: ASSET
+        tests:
+          - not_null
+      - name: POOL_DEDUCT
+        tests:
+          - not_null
+      - name: ASSET_E8
+        tests:
+          - not_null

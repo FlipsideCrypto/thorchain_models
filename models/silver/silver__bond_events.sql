@@ -10,9 +10,8 @@ SELECT
   asset,
   asset_e8,
   memo,
-  rune_e8,
-  pool AS pool_name,
-  event_id,
+  bond_type,
+  e8,
   block_timestamp,
   DATEADD(
     ms,
@@ -20,7 +19,7 @@ SELECT
     '1970-01-01'
   ) AS _INSERTED_TIMESTAMP
 FROM
-  {{ ref('bronze__add_events') }}
-  qualify(ROW_NUMBER() over(PARTITION BY event_id, tx, chain, from_addr, to_addr, asset, memo, pool, block_timestamp
+  {{ ref('bronze__bond_events') }}
+  qualify(ROW_NUMBER() over(PARTITION BY tx, from_addr, asset_e8, bond_type, e8, block_timestamp, to_addr, chain, asset, memo
 ORDER BY
   __HEVO__LOADED_AT DESC)) = 1

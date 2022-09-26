@@ -1,9 +1,9 @@
 version: 2
 models:
-  - name: core__fact_active_vault_events
-    description: "Fatc table containing the events triggered by the churning activities"
+  - name: core__fact_block_pool_depths
+    description: "Fact table containing all the available pools and its rune/asset depth at each block interval"
     columns:
-      - name: FACT_ACTIVE_VAULT_EVENTS_ID
+      - name: FACT_POOL_DEPTHS_ID
         description: "{{ doc('sk') }}"
         tests:
           - dbt_expectations.expect_column_to_exist
@@ -18,13 +18,25 @@ models:
         tests:
           - negative_one:
               where: _inserted_timestamp <  (CURRENT_TIMESTAMP - INTERVAL '8 HOURS')
-      - name: ADD_ASGARD_ADDR
-        description: "The asgard address added to the vault"
+      - name: RUNE_E8
+        description: "The rune depth for this pool at this block"
+        tests:
+          - not_null
+      - name: ASSET_E8
+        description: "The asset depth for this pool at this block"
+        tests:
+          - not_null
+      - name: SYNTH_E8
+        description: ""
+        tests:
+          - not_null
+      - name: POOL_NAME
+        description: "{{ doc('pool_name') }}"
         tests:
           - not_null
     tests:
       - dbt_constraints.primary_key:
-          column_name: FACT_ACTIVE_VAULT_EVENTS_ID
+          column_name: FACT_POOL_DEPTHS_ID
       - dbt_constraints.foreign_key:
           fk_column_name: DIM_BLOCK_ID
           pk_table_name: ref('core__dim_block')

@@ -1,9 +1,9 @@
 version: 2
 models:
-  - name: core__fact_active_vault_events
-    description: "Fatc table containing the events triggered by the churning activities"
+  - name: core__fact_new_node_events
+    description: "Fact table that provides the summary of the gas events for each block"
     columns:
-      - name: FACT_ACTIVE_VAULT_EVENTS_ID
+      - name: FACT_NEW_NODE_EVENTS_ID
         description: "{{ doc('sk') }}"
         tests:
           - dbt_expectations.expect_column_to_exist
@@ -18,13 +18,13 @@ models:
         tests:
           - negative_one:
               where: _inserted_timestamp <  (CURRENT_TIMESTAMP - INTERVAL '8 HOURS')
-      - name: ADD_ASGARD_ADDR
-        description: "The asgard address added to the vault"
+      - name: NODE_ADDRESS
+        description: "The asgard address in the vault which are inactive"
         tests:
-          - not_null
+          - not_null 
     tests:
       - dbt_constraints.primary_key:
-          column_name: FACT_ACTIVE_VAULT_EVENTS_ID
+          column_name: FACT_NEW_NODE_EVENTS_ID
       - dbt_constraints.foreign_key:
           fk_column_name: DIM_BLOCK_ID
           pk_table_name: ref('core__dim_block')

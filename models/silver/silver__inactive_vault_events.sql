@@ -3,21 +3,16 @@
 ) }}
 
 SELECT
-  add_asgard_addr,
+  add_asgard_addr AS add_asgard_address,
   event_id,
   block_timestamp,
-  __HEVO_XMIN,
-  __HEVO__DATABASE_NAME,
-  __HEVO__SCHEMA_NAME,
-  __HEVO__INGESTED_AT,
-  __HEVO__LOADED_AT,
   DATEADD(
     ms,
     __HEVO__LOADED_AT,
     '1970-01-01'
   ) AS _INSERTED_TIMESTAMP
 FROM
-  {{ ref('bronze__active_vault_events') }}
+  {{ ref('bronze__inactive_vault_events') }}
   qualify(ROW_NUMBER() over(PARTITION BY event_id, add_asgard_addr, block_timestamp
 ORDER BY
   __HEVO__LOADED_AT DESC)) = 1

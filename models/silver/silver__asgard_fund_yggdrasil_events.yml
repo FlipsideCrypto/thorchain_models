@@ -1,0 +1,28 @@
+version: 2
+models:
+  - name: silver__asgard_fund_yggdrasil_events
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - EVENT_ID
+            - TX_ID
+            - ASSET
+            - ASSET_E8
+            - VAULT_KEY
+            - BLOCK_TIMESTAMP
+    columns:
+      - name: BLOCK_TIMESTAMP
+        tests:
+          - not_null
+      - name: TX_ID
+        tests:
+          - not_null
+      - name: ASSET
+        tests:
+          - not_null
+      - name: ASSET_E8
+        tests:
+          - not_null
+      - name: VAULT_KEY
+        tests:
+          - not_null

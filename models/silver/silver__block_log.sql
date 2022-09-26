@@ -21,7 +21,7 @@ WITH base AS (
     {{ ref('bronze__block_log') }}
     qualify(ROW_NUMBER() over(PARTITION BY height
   ORDER BY
-    __HEVO__INGESTED_AT DESC)) = 1
+    __HEVO__LOADED_AT DESC)) = 1
 )
 SELECT
   height,
