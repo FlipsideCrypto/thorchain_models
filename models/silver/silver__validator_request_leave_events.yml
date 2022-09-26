@@ -1,0 +1,27 @@
+version: 2
+models:
+  - name: silver__validator_request_leave_events
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: event_id, tx, block_timestamp, from_addr, node_addr
+            - EVENT_ID
+            - TX_ID
+            - BLOCK_TIMESTAMP
+            - FROM_ADDRESS
+            - NODE_ADDRESS
+    columns:
+      - name: EVENT_ID
+        tests:
+          - not_null
+      - name: TX_ID
+        tests:
+          - not_null
+      - name: FROM_ADDRESS
+        tests:
+          - not_null
+      - name: NODE_ADDRESS
+        tests:
+          - not_null
+      - name: BLOCK_TIMESTAMP
+        tests:
+          - not_null
