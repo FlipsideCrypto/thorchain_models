@@ -17,7 +17,7 @@ models:
         description: "FK to DIM_BLOCK table"
         tests:
           - negative_one:
-              where: _inserted_timestamp <  (CURRENT_TIMESTAMP - INTERVAL '8 HOURS'
+              where: _inserted_timestamp <  (CURRENT_TIMESTAMP - INTERVAL '8 HOURS')
       - name: TX_ID
         description: "{{ doc('tx_id') }}"
         tests:

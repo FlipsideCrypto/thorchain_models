@@ -44,7 +44,7 @@ models:
         description: ""
         tests:
           - not_null
-      - name: EMIT_RUN_E8
+      - name: EMIT_RUNE_E8
         description: ""
         tests:
           - not_null

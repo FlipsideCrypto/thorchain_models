@@ -5,8 +5,8 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - NODE_ADDRESS
-            - CURRENT_FLAG
-            - FORMER
+            - CURRENT_STATUS
+            - FORMER_STATUS
             - BLOCK_TIMESTAMP
     columns:
       - name: NODE_ADDRESS
