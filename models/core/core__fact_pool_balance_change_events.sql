@@ -16,16 +16,6 @@ WITH base AS (
     reason,
     event_id,
     block_timestamp,
-    concat_ws(
-      '-',
-      event_id :: STRING,
-      asset :: STRING,
-      block_timestamp :: STRING,
-      COALESCE(
-        reason :: STRING,
-        ''
-      )
-    ) AS _unique_key,
     _INSERTED_TIMESTAMP
   FROM
     {{ ref('silver__pool_balance_change_events') }}
@@ -44,7 +34,7 @@ WHERE
 )
 SELECT
   {{ dbt_utils.surrogate_key(
-    ['a._unique_key']
+    ['a.event_id','a.asset','a.block_timestamp']
   ) }} AS fact_pool_balance_change_events_id,
   b.block_timestamp,
   COALESCE(

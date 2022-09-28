@@ -18,19 +18,6 @@ WITH base AS (
     bond_type,
     e8,
     block_timestamp,
-    concat_ws(
-      '-',
-      tx_id :: STRING,
-      from_address :: STRING,
-      to_address :: STRING,
-      asset_e8 :: STRING,
-      bond_type :: STRING,
-      e8 :: STRING,
-      block_timestamp :: STRING,
-      blockchain :: STRING,
-      asset :: STRING,
-      memo :: STRING
-    ) AS _unique_key,
     _INSERTED_TIMESTAMP
   FROM
     {{ ref('silver__bond_events') }}
@@ -49,7 +36,7 @@ WHERE
 )
 SELECT
   {{ dbt_utils.surrogate_key(
-    ['a._unique_key']
+    ['a.tx_id','a.from_address','a.to_address ','a.asset_e8','a.bond_type','a.e8','a.block_timestamp','a.blockchain','a.asset','a.memo']
   ) }} AS fact_bond_events_id,
   b.block_timestamp,
   COALESCE(

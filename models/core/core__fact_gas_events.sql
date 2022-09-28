@@ -12,13 +12,8 @@ WITH base AS (
     asset_e8,
     rune_e8,
     tx_count,
+    event_id,
     block_timestamp,
-    concat_ws(
-      '-',
-      event_id :: STRING,
-      asset :: STRING,
-      block_timestamp :: STRING
-    ) AS _unique_key,
     _INSERTED_TIMESTAMP
   FROM
     {{ ref('silver__gas_events') }}
@@ -37,7 +32,7 @@ WHERE
 )
 SELECT
   {{ dbt_utils.surrogate_key(
-    ['a._unique_key']
+    ['a.event_id','a.asset','a.block_timestamp']
   ) }} AS fact_gas_events_id,
   b.block_timestamp,
   COALESCE(

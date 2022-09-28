@@ -26,20 +26,8 @@ bond_events AS (
     bond_type,
     asset_e8,
     e8,
+    memo,
     event_id,
-    concat_ws(
-      '-',
-      tx_id :: STRING,
-      from_address :: STRING,
-      to_address :: STRING,
-      asset_e8 :: STRING,
-      bond_type :: STRING,
-      e8 :: STRING,
-      block_timestamp :: STRING,
-      blockchain :: STRING,
-      asset :: STRING,
-      memo :: STRING
-    ) AS _unique_key,
     _inserted_timestamp
   FROM
     {{ ref('silver__bond_events') }}
@@ -58,7 +46,7 @@ WHERE
 )
 SELECT
   {{ dbt_utils.surrogate_key(
-    ['be._unique_key']
+    ['be.tx_id','be.from_address','be.to_address ','be.asset_e8','be.bond_type','be.e8','be.block_timestamp','be.blockchain','be.asset','be.memo']
   ) }} AS fact_bond_actions_id,
   b.block_timestamp,
   COALESCE(
@@ -76,6 +64,7 @@ SELECT
     rune_usd * asset_e8,
     0
   ) AS asset_usd,
+  memo,
   be._inserted_timestamp,
   '{{ env_var("DBT_CLOUD_RUN_ID", "manual") }}' AS _audit_run_id
 FROM

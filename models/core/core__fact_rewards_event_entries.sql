@@ -36,7 +36,7 @@ WHERE
 )
 SELECT
   {{ dbt_utils.surrogate_key(
-    ['a.block_timestamp']
+    ['a.event_id','a.pool_name','a.block_timestamp']
   ) }} AS fact_rewards_event_entries_id,
   b.block_timestamp,
   COALESCE(

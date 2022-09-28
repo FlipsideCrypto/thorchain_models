@@ -51,6 +51,9 @@ models:
         description: "Used the price table to calculate the asset in the usd"
         tests:
           - not_null
+      - name: MEMO
+        description: "{{ doc('memo') }}"
+
     tests:
       - dbt_constraints.primary_key:
           column_name: FACT_BOND_ACTIONS_ID

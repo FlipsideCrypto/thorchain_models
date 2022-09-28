@@ -43,9 +43,7 @@ WHERE
 )
 SELECT
   {{ dbt_utils.surrogate_key(
-    ['a.tx_id', 'a.blockchain', 'a.from_address', 'a.to_address', 'a.asset', 'a.asset_e8', 'a.emit_asset_e8',
-    'a.emit_rune_e8', 'a.memo', 'a.pool_name', 'a.stake_units', 'a.basis_points', 'a.asymmetry', 'a.imp_loss_protection_e8',
-    'a._emit_asset_in_rune_e8','a.block_timestamp']
+    ['a.tx_id', 'a.blockchain', 'a.from_address', 'a.to_address', 'a.asset', 'a.asset_e8', 'a.emit_asset_e8', 'a.emit_rune_e8', 'a.memo', 'a.pool_name', 'a.stake_units', 'a.basis_points', 'a.asymmetry', 'a.imp_loss_protection_e8', 'a._emit_asset_in_rune_e8','a.block_timestamp']
   ) }} AS fact_unstake_events_id,
   b.block_timestamp,
   COALESCE(

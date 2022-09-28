@@ -1,6 +1,6 @@
 {{ config(
   materialized = 'incremental',
-  unique_key = 'fact_pool_events_id',
+  unique_key = 'fact_refund_events_id',
   incremental_strategy = 'merge',
   cluster_by = ['block_timestamp::DATE']
 ) }}
@@ -21,16 +21,9 @@ WITH base AS (
     reason,
     event_id,
     block_timestamp,
-    concat_ws(
-      '-',
-      event_id :: STRING,
-      asset :: STRING,
-      block_timestamp :: STRING,
-      status :: STRING
-    ) AS _unique_key,
     _INSERTED_TIMESTAMP
   FROM
-    {{ ref('silver__pool_events') }}
+    {{ ref('silver__refund_events') }}
 
 {% if is_incremental() %}
 WHERE
@@ -46,15 +39,24 @@ WHERE
 )
 SELECT
   {{ dbt_utils.surrogate_key(
-    ['a._unique_key']
-  ) }} AS fact_pool_events_id,
+    ['a.event_id','a.tx_id','a.blockchain','a.from_address' ,'a.to_address','a. asset', 'a.asset_2nd', 'a.memo', 'a.code', 'a.reason', 'a.block_timestamp']
+  ) }} AS fact_refund_events_id,
   b.block_timestamp,
   COALESCE(
     b.dim_block_id,
     '-1'
   ) AS dim_block_id,
+  tx_id,
+  blockchain,
+  from_address,
+  to_address,
   asset,
-  status,
+  asset_e8,
+  asset_2nd,
+  asset_2nd_e8,
+  memo,
+  code,
+  reason,
   A._INSERTED_TIMESTAMP,
   '{{ env_var("DBT_CLOUD_RUN_ID", "manual") }}' AS _audit_run_id
 FROM

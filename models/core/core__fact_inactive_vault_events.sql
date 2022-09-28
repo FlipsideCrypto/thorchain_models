@@ -9,13 +9,8 @@ WITH base AS (
 
   SELECT
     add_asgard_address,
+    event_id,
     block_timestamp,
-    concat_ws(
-      '-',
-      event_id :: STRING,
-      add_asgard_address :: STRING,
-      block_timestamp :: STRING
-    ) AS _unique_key,
     _INSERTED_TIMESTAMP
   FROM
     {{ ref('silver__inactive_vault_events') }}
@@ -34,7 +29,7 @@ WHERE
 )
 SELECT
   {{ dbt_utils.surrogate_key(
-    ['a._unique_key']
+    ['a.event_id','a.add_asgard_address','a.block_timestamp']
   ) }} AS fact_inactive_vault_events_id,
   b.block_timestamp,
   COALESCE(
