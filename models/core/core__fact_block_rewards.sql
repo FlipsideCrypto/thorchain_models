@@ -1,6 +1,6 @@
 {{ config(
   materialized = 'incremental',
-  unique_key = 'fact_total_value_locked_id',
+  unique_key = 'fact_block_rewards_id',
   incremental_strategy = 'merge'
 ) }}
 
@@ -8,12 +8,15 @@ WITH base AS (
 
   SELECT
     DAY,
-    total_value_pooled,
-    total_value_bonded,
-    total_value_locked,
+    liquidity_fee,
+    block_rewards,
+    earnings,
+    bonding_earnings,
+    liquidity_earnings,
+    avg_node_count,
     _INSERTED_TIMESTAMP
   FROM
-    {{ ref('silver__total_value_locked') }}
+    {{ ref('silver__block_rewards') }}
 
 {% if is_incremental() %}
 WHERE
@@ -30,12 +33,15 @@ WHERE
 SELECT
   {{ dbt_utils.surrogate_key(
     ['a.day']
-  ) }} AS fact_total_value_locked_id,
+  ) }} AS fact_block_rewards_id,
   DAY,
-  total_value_pooled,
-  total_value_bonded,
-  total_value_locked,
-  _INSERTED_TIMESTAMP,
+  liquidity_fee,
+  block_rewards,
+  earnings,
+  bonding_earnings,
+  liquidity_earnings,
+  avg_node_count,
+  A._inserted_timestamp,
   '{{ env_var("DBT_CLOUD_RUN_ID", "manual") }}' AS _audit_run_id
 FROM
   base A

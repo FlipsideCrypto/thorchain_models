@@ -1,0 +1,33 @@
+version: 2
+models:
+  - name: silver__stake_events
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+          - POOL_NAME
+          - ASSET_TX_ID
+          - ASSET_BLOCKCHAIN
+          - ASSET_ADDRESS
+          - STAKE_UNITS
+          - RUNE_TX_ID
+          - RUNE_ADDRESS
+          - BLOCK_TIMESTAMP
+    columns:
+      - name: POOL_NAME
+        tests:
+          - not_null
+      - name: ASSET_E8
+        tests:
+          - not_null
+      - name: STAKE_UNITS
+        tests:
+          - not_null
+      - name: RUNE_E8
+        tests:
+          - not_null
+      - name: _ASSET_IN_RUNE_E8
+        tests:
+          - not_null
+      - name: BLOCK_TIMESTAMP
+        tests:
+          - not_null

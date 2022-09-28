@@ -23,7 +23,6 @@ WITH blocks AS (
 {% if is_incremental() %}
 WHERE
   b.block_timestamp :: DATE >= CURRENT_DATE -2
-{% else %}
 {% endif %}
 ),
 max_pool_blocks AS (

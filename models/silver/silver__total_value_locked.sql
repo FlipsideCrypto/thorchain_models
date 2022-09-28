@@ -31,7 +31,7 @@ WHERE
       )
     FROM
       {{ this }}
-  )
+  ) - INTERVAL '4 HOURS'
 {% endif %}
 GROUP BY
   DAY,

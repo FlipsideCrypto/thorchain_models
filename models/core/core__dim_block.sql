@@ -37,7 +37,7 @@ WHERE
             )
         FROM
             {{ this }}
-    )
+    ) - INTERVAL '4 HOURS'
 {% endif %}
 UNION ALL
 SELECT
