@@ -1,9 +1,9 @@
 version: 2
 models:
-  - name: core__fact_rewards_events
-    description: "Fact table that shows the entries for the rewards"
+  - name: core__fact_set_version_events
+    description: "Fact table that shows set mimir events"
     columns:
-      - name: FACT_REWARDS_EVENTS_ID
+      - name: FACT_SET_VERSION_EVENTS_ID
         description: "{{ doc('sk') }}"
         tests:
           - dbt_expectations.expect_column_to_exist
@@ -18,11 +18,11 @@ models:
         tests:
           - negative_one:
               where: _inserted_timestamp <  (CURRENT_TIMESTAMP - INTERVAL '8 HOURS')
-      - name: BOND_E8
-        description: "The rune amount of the bond for this pool at this block"
+      - name: VERSION
+        description: ""
     tests:
       - dbt_constraints.primary_key:
-          column_name: FACT_REWARDS_EVENTS_ID
+          column_name: FACT_SET_VERSION_EVENTS_ID
       - dbt_constraints.foreign_key:
           fk_column_name: DIM_BLOCK_ID
           pk_table_name: ref('core__dim_block')

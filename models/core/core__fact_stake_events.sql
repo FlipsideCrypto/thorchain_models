@@ -1,6 +1,6 @@
 {{ config(
   materialized = 'incremental',
-  unique_key = 'fact_pool_depths_id',
+  unique_key = 'fact_stake_events_id',
   incremental_strategy = 'merge',
   cluster_by = ['block_timestamp::DATE']
 ) }}
@@ -9,13 +9,20 @@ WITH base AS (
 
   SELECT
     pool_name,
+    asset_tx_id,
+    asset_blockchain,
+    asset_address,
     asset_e8,
+    stake_units,
+    rune_tx_id,
+    rune_address,
     rune_e8,
-    synth_e8,
+    _ASSET_IN_RUNE_E8,
+    event_id,
     block_timestamp,
-    _inserted_timestamp
+    _INSERTED_TIMESTAMP
   FROM
-    {{ ref('silver__block_pool_depths') }}
+    {{ ref('silver__stake_events') }}
 
 {% if is_incremental() %}
 WHERE
@@ -31,17 +38,23 @@ WHERE
 )
 SELECT
   {{ dbt_utils.surrogate_key(
-    ['a.pool_name','a.block_timestamp']
-  ) }} AS fact_pool_depths_id,
+    ['a.event_id', 'a.pool_name', 'a.asset_blockchain', 'a.stake_units', 'a.rune_address', 'a.asset_tx_id', 'a.asset_address', 'a.block_timestamp']
+  ) }} AS fact_stake_events_id,
   b.block_timestamp,
   COALESCE(
     b.dim_block_id,
     '-1'
   ) AS dim_block_id,
-  rune_e8,
-  asset_e8,
-  synth_e8,
   pool_name,
+  asset_tx_id,
+  asset_blockchain,
+  asset_address,
+  asset_e8,
+  stake_units,
+  rune_tx_id,
+  rune_address,
+  rune_e8,
+  _ASSET_IN_RUNE_E8,
   A._inserted_timestamp,
   '{{ env_var("DBT_CLOUD_RUN_ID", "manual") }}' AS _audit_run_id
 FROM

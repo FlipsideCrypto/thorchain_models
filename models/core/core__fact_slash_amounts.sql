@@ -1,6 +1,6 @@
 {{ config(
   materialized = 'incremental',
-  unique_key = 'fact_pool_depths_id',
+  unique_key = 'fact_slash_amounts_id',
   incremental_strategy = 'merge',
   cluster_by = ['block_timestamp::DATE']
 ) }}
@@ -9,13 +9,13 @@ WITH base AS (
 
   SELECT
     pool_name,
+    asset,
     asset_e8,
-    rune_e8,
-    synth_e8,
+    event_id,
     block_timestamp,
-    _inserted_timestamp
+    _INSERTED_TIMESTAMP
   FROM
-    {{ ref('silver__block_pool_depths') }}
+    {{ ref('silver__slash_amounts') }}
 
 {% if is_incremental() %}
 WHERE
@@ -31,18 +31,17 @@ WHERE
 )
 SELECT
   {{ dbt_utils.surrogate_key(
-    ['a.pool_name','a.block_timestamp']
-  ) }} AS fact_pool_depths_id,
+    ['a.event_id','a.pool_name','a.asset']
+  ) }} AS fact_slash_amounts_id,
   b.block_timestamp,
   COALESCE(
     b.dim_block_id,
     '-1'
   ) AS dim_block_id,
-  rune_e8,
-  asset_e8,
-  synth_e8,
   pool_name,
-  A._inserted_timestamp,
+  asset,
+  asset_e8,
+  A._INSERTED_TIMESTAMP,
   '{{ env_var("DBT_CLOUD_RUN_ID", "manual") }}' AS _audit_run_id
 FROM
   base A

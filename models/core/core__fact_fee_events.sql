@@ -12,16 +12,8 @@ WITH base AS (
     asset,
     pool_deduct,
     asset_e8,
+    event_id,
     block_timestamp,
-    concat_ws(
-      '-',
-      event_id :: STRING,
-      asset :: STRING,
-      asset_e8 :: STRING,
-      pool_deduct :: STRING,
-      block_timestamp :: STRING,
-      tx_id :: STRING
-    ) AS _unique_key,
     _INSERTED_TIMESTAMP
   FROM
     {{ ref('silver__fee_events') }}
@@ -35,12 +27,12 @@ WHERE
       )
     FROM
       {{ this }}
-  )
+  ) - INTERVAL '4 HOURS'
 {% endif %}
 )
 SELECT
   {{ dbt_utils.surrogate_key(
-    ['a._unique_key']
+    ['a.event_id','a.asset','a.asset_e8','a.pool_deduct','a.block_timestamp','a.tx_id ']
   ) }} AS fact_fee_events_id,
   b.block_timestamp,
   COALESCE(

@@ -10,12 +10,7 @@ WITH base AS (
   SELECT
     node_address,
     block_timestamp,
-    concat_ws(
-      '-',
-      event_id :: STRING,
-      node_address :: STRING,
-      block_timestamp :: STRING
-    ) AS _unique_key,
+    event_id,
     _INSERTED_TIMESTAMP
   FROM
     {{ ref('silver__new_node_events') }}
@@ -29,12 +24,12 @@ WHERE
       )
     FROM
       {{ this }}
-  )
+  ) - INTERVAL '4 HOURS'
 {% endif %}
 )
 SELECT
   {{ dbt_utils.surrogate_key(
-    ['a._unique_key']
+    ['a.event_id','a.node_address','a.block_timestamp']
   ) }} AS fact_new_node_events_id,
   b.block_timestamp,
   COALESCE(

@@ -19,30 +19,6 @@ WITH base AS (
     pending_type,
     event_id,
     block_timestamp,
-    concat_ws(
-      '-',
-      event_id :: STRING,
-      pool_name :: STRING,
-      COALESCE(
-        asset_tx_id :: STRING,
-        ''
-      ),
-      COALESCE(
-        asset_blockchain :: STRING,
-        ''
-      ),
-      COALESCE(
-        asset_address :: STRING,
-        ''
-      ),
-      COALESCE(
-        rune_tx_id :: STRING,
-        ''
-      ),
-      rune_address :: STRING,
-      pending_type :: STRING,
-      block_timestamp :: STRING
-    ) AS _unique_key,
     _INSERTED_TIMESTAMP
   FROM
     {{ ref('silver__pending_liquidity_events') }}
@@ -56,12 +32,12 @@ WHERE
       )
     FROM
       {{ this }}
-  )
+  ) - INTERVAL '4 HOURS'
 {% endif %}
 )
 SELECT
   {{ dbt_utils.surrogate_key(
-    ['a._unique_key']
+    ['a.event_id','a.pool_name ','a.asset_tx_id','a.asset_blockchain','a.asset_address','a.rune_tx_id','a.rune_address ','a.pending_type','a.block_timestamp']
   ) }} AS fact_pending_liquidity_events_id,
   b.block_timestamp,
   COALESCE(

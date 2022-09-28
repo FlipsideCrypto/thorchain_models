@@ -12,6 +12,7 @@ SELECT
   memo,
   bond_type,
   e8,
+  event_id,
   block_timestamp,
   DATEADD(
     ms,
@@ -20,6 +21,6 @@ SELECT
   ) AS _INSERTED_TIMESTAMP
 FROM
   {{ ref('bronze__bond_events') }}
-  qualify(ROW_NUMBER() over(PARTITION BY tx, from_addr, asset_e8, bond_type, e8, block_timestamp, to_addr, chain, asset, memo
+  qualify(ROW_NUMBER() over(PARTITION BY tx, from_addr, asset_e8, bond_type, e8, block_timestamp, COALESCE(to_addr, ''), COALESCE(chain, ''), COALESCE(asset, ''), COALESCE(memo, '')
 ORDER BY
   __HEVO__LOADED_AT DESC)) = 1

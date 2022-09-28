@@ -1,6 +1,5 @@
 {{ config(
-  materialized = 'view',
-  tags = ['snowflake', 'silver_thorchain', 'outbound_events']
+  materialized = 'view'
 ) }}
 
 SELECT

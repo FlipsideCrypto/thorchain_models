@@ -29,12 +29,12 @@ WHERE
       )
     FROM
       {{ this }}
-  )
+  ) - INTERVAL '4 HOURS'
 {% endif %}
 )
 SELECT
   {{ dbt_utils.surrogate_key(
-    ['a._unique_key']
+    ['a.event_id','a.block_timestamp']
   ) }} AS fact_rewards_events_id,
   b.block_timestamp,
   COALESCE(

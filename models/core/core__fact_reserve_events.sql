@@ -19,18 +19,6 @@ WITH base AS (
     e8,
     event_id,
     block_timestamp,
-    concat_ws(
-      '-',
-      event_id :: STRING,
-      tx_id :: STRING,
-      blockchain :: STRING,
-      from_address :: STRING,
-      to_address :: STRING,
-      asset :: STRING,
-      memo :: STRING,
-      address :: STRING,
-      block_timestamp :: STRING
-    ) AS _unique_key,
     _INSERTED_TIMESTAMP
   FROM
     {{ ref('silver__reserve_events') }}
@@ -44,12 +32,12 @@ WHERE
       )
     FROM
       {{ this }}
-  )
+  ) - INTERVAL '4 HOURS'
 {% endif %}
 )
 SELECT
   {{ dbt_utils.surrogate_key(
-    ['a._unique_key']
+    ['a.event_id','a.tx_id','a.blockchain','a.from_address','a.to_address','a.asset','a.memo','a.address','a.block_timestamp']
   ) }} AS fact_reserve_events_id,
   b.block_timestamp,
   COALESCE(

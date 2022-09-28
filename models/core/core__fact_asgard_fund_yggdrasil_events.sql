@@ -14,15 +14,6 @@ WITH base AS (
     vault_key,
     event_id,
     block_timestamp,
-    concat_ws(
-      '-',
-      event_id :: STRING,
-      tx_id :: STRING,
-      asset :: STRING,
-      asset_e8 :: STRING,
-      vault_key :: STRING,
-      block_timestamp :: STRING
-    ) AS _unique_key,
     _inserted_timestamp
   FROM
     {{ ref('silver__asgard_fund_yggdrasil_events') }}
@@ -36,12 +27,12 @@ WHERE
       )
     FROM
       {{ this }}
-  )
+  ) - INTERVAL '4 HOURS'
 {% endif %}
 )
 SELECT
   {{ dbt_utils.surrogate_key(
-    ['a._unique_key']
+    ['a.event_id','a.tx_id','a.asset ','a.asset_e8','a.vault_key','a.block_timestamp']
   ) }} AS fact_asgard_fund_yggdrasil_events_id,
   b.block_timestamp,
   COALESCE(

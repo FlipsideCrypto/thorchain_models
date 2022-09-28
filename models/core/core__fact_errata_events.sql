@@ -14,13 +14,6 @@ WITH base AS (
     rune_e8,
     event_id,
     block_timestamp,
-    concat_ws(
-      '-',
-      event_id :: STRING,
-      in_tx :: STRING,
-      asset :: STRING,
-      block_timestamp :: STRING
-    ) AS _unique_key,
     _INSERTED_TIMESTAMP
   FROM
     {{ ref('silver__errata_events') }}
@@ -34,12 +27,12 @@ WHERE
       )
     FROM
       {{ this }}
-  )
+  ) - INTERVAL '4 HOURS'
 {% endif %}
 )
 SELECT
   {{ dbt_utils.surrogate_key(
-    ['a._unique_key']
+    ['a.event_id','a.in_tx','a.asset','a.block_timestamp']
   ) }} AS fact_errata_events_id,
   b.block_timestamp,
   COALESCE(
