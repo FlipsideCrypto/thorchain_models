@@ -22,6 +22,7 @@ SELECT
   burn_e8,
   mint_e8,
   block_timestamp,
+  event_id,
   __HEVO_XMIN,
   __HEVO__DATABASE_NAME,
   __HEVO__SCHEMA_NAME,
