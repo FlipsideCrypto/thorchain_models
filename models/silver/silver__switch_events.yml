@@ -1,0 +1,22 @@
+version: 2
+models:
+  - name: silver__switch_events
+    columns:
+      - name: BLOCK_TIMESTAMP
+        tests:
+          - not_null
+      - name: TO_ADDRESS
+        tests:
+          - not_null
+      - name: BURN_ASSET
+        tests:
+          - not_null
+      - name: FROM_ADDRESS
+        tests:
+          - not_null
+      - name: BURN_E8
+        tests:
+          - not_null
+      - name: MINT_E8
+        tests:
+          - not_null

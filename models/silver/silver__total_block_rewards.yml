@@ -1,11 +1,11 @@
 version: 2
 models:
-  - name: silver__pool_block_balances
+  - name: silver__total_block_rewards
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - BLOCK_ID
-            - POOL_NAME
+            - REWARD_ENTITY
     columns:
       - name: BLOCK_TIMESTAMP
         tests:
@@ -16,7 +16,7 @@ models:
       - name: BLOCK_ID
         tests:
           - not_null
-      - name: POOL_NAME
+      - name: REWARD_ENTITY
         tests:
           - not_null
       - name: RUNE_AMOUNT
@@ -25,16 +25,4 @@ models:
       - name: RUNE_AMOUNT_USD
         tests:
           - not_null:
-              where: BLOCK_TIMESTAMP <= current_date -2 AND BLOCK_TIMESTAMP >= '2021-04-13'
-      - name: ASSET_AMOUNT
-        tests:
-          - not_null
-      - name: ASSET_AMOUNT_USD
-        tests:
-          - not_null
-      - name: SYNTH_AMOUNT
-        tests:
-          - not_null
-      - name: SYNTH_AMOUNT_USD
-        tests:
-          - not_null
+              where: BLOCK_TIMESTAMP <= CURRENT_DATE - 2 AND BLOCK_TIMESTAMP >= '2021-04-13'

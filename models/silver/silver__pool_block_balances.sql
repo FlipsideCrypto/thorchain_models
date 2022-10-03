@@ -6,7 +6,7 @@
 ) }}
 
 SELECT
-  DISTINCT b.block_timestamp,
+  b.block_timestamp,
   b.height AS block_id,
   bpd.pool_name,
   COALESCE(rune_e8 / pow(10, 8), 0) AS rune_amount,
@@ -15,6 +15,11 @@ SELECT
   COALESCE(asset_e8 / pow(10, 8) * asset_usd, 0) AS asset_amount_usd,
   COALESCE(synth_e8 / pow(10, 8), 0) AS synth_amount,
   COALESCE(synth_e8 / pow(10, 8) * asset_usd, 0) AS synth_amount_usd,
+  concat_ws(
+    '-',
+    bpd.block_timestamp,
+    bpd.pool_name
+  ) AS _unique_key,
   bpd._inserted_timestamp
 FROM
   {{ ref('silver__block_pool_depths') }}
@@ -29,7 +34,7 @@ FROM
 
 {% if is_incremental() %}
 WHERE
-  _inserted_timestamp >= (
+  bpd._inserted_timestamp >= (
     SELECT
       MAX(
         _inserted_timestamp

@@ -3,7 +3,7 @@ models:
   - name: silver__validator_request_leave_events
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns: event_id, tx, block_timestamp, from_addr, node_addr
+          combination_of_columns:
             - EVENT_ID
             - TX_ID
             - BLOCK_TIMESTAMP

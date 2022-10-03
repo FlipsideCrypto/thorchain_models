@@ -1,40 +1,33 @@
 version: 2
 models:
-  - name: silver__pool_block_balances
+  - name: silver__pool_block_fees
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - BLOCK_ID
+            - DAY
             - POOL_NAME
     columns:
-      - name: BLOCK_TIMESTAMP
+      - name: DAY
         tests:
           - not_null
           - dbt_expectations.expect_row_values_to_have_recent_data:
               datepart: day
               interval: 1
-      - name: BLOCK_ID
-        tests:
-          - not_null
       - name: POOL_NAME
         tests:
           - not_null
-      - name: RUNE_AMOUNT
+      - name: REWARDS
         tests:
           - not_null
-      - name: RUNE_AMOUNT_USD
-        tests:
-          - not_null:
-              where: BLOCK_TIMESTAMP <= current_date -2 AND BLOCK_TIMESTAMP >= '2021-04-13'
-      - name: ASSET_AMOUNT
+      - name: TOTAL_LIQUIDITY_FEES_RUNE
         tests:
           - not_null
-      - name: ASSET_AMOUNT_USD
+      - name: ASSET_LIQUIDITY_FEES
         tests:
           - not_null
-      - name: SYNTH_AMOUNT
+      - name: RUNE_LIQUIDITY_FEES
         tests:
           - not_null
-      - name: SYNTH_AMOUNT_USD
+      - name: EARNINGS
         tests:
           - not_null

@@ -1,6 +1,6 @@
 {{ config(
   materialized = 'incremental',
-  unique_key = 'fact_rewards_events_id',
+  unique_key = 'fact_thorname_change_events_id',
   incremental_strategy = 'merge',
   cluster_by = ['block_timestamp::DATE']
 ) }}
@@ -8,12 +8,22 @@
 WITH base AS (
 
   SELECT
-    bond_e8,
+    owner,
+    chain,
+    address,
+    expire,
+    NAME,
+    fund_amount_e8,
+    registration_fee_e8,
     event_id,
     block_timestamp,
-    _INSERTED_TIMESTAMP
+    DATEADD(
+      ms,
+      __HEVO__LOADED_AT,
+      '1970-01-01'
+    ) AS _INSERTED_TIMESTAMP
   FROM
-    {{ ref('silver__rewards_events') }}
+    {{ ref('bronze__thorname_change_events') }}
 
 {% if is_incremental() %}
 WHERE
@@ -29,14 +39,20 @@ WHERE
 )
 SELECT
   {{ dbt_utils.surrogate_key(
-    ['a.event_id','a.block_timestamp']
-  ) }} AS fact_rewards_events_id,
+    ['a.event_id','a.block_timestamp','a.owner','a.chain','a.address','a.expire','a.name']
+  ) }} AS fact_thorname_change_events_id,
   b.block_timestamp,
   COALESCE(
     b.dim_block_id,
     '-1'
   ) AS dim_block_id,
-  bond_e8,
+  owner,
+  chain,
+  address,
+  expire,
+  NAME,
+  fund_amount_e8,
+  registration_fee_e8,
   A._INSERTED_TIMESTAMP,
   '{{ env_var("DBT_CLOUD_RUN_ID", "manual") }}' AS _audit_run_id
 FROM

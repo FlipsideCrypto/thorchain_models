@@ -1,6 +1,6 @@
 {{ config(
   materialized = 'incremental',
-  unique_key = 'fact_rewards_events_id',
+  unique_key = 'fact_pool_block_balances_id',
   incremental_strategy = 'merge',
   cluster_by = ['block_timestamp::DATE']
 ) }}
@@ -8,12 +8,18 @@
 WITH base AS (
 
   SELECT
-    bond_e8,
-    event_id,
-    block_timestamp,
+    block_id,
+    pool_name,
+    rune_amount,
+    rune_amount_usd,
+    asset_amount,
+    asset_amount_usd,
+    synth_amount,
+    synth_amount_usd,
+    _unique_key,
     _INSERTED_TIMESTAMP
   FROM
-    {{ ref('silver__rewards_events') }}
+    {{ ref('silver__pool_block_balances') }}
 
 {% if is_incremental() %}
 WHERE
@@ -29,18 +35,24 @@ WHERE
 )
 SELECT
   {{ dbt_utils.surrogate_key(
-    ['a.event_id','a.block_timestamp']
-  ) }} AS fact_rewards_events_id,
+    ['a._unique_key']
+  ) }} AS fact_pool_block_balances_id,
   b.block_timestamp,
   COALESCE(
     b.dim_block_id,
     '-1'
   ) AS dim_block_id,
-  bond_e8,
+  pool_name,
+  rune_amount,
+  rune_amount_usd,
+  asset_amount,
+  asset_amount_usd,
+  synth_amount,
+  synth_amount_usd,
   A._INSERTED_TIMESTAMP,
   '{{ env_var("DBT_CLOUD_RUN_ID", "manual") }}' AS _audit_run_id
 FROM
   base A
   LEFT JOIN {{ ref('core__dim_block') }}
   b
-  ON A.block_timestamp = b.timestamp
+  ON A.block_id = b.block_id
