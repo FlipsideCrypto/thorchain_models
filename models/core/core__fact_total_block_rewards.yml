@@ -18,15 +18,15 @@ models:
         tests:
           - negative_one:
               where: _inserted_timestamp <  (CURRENT_TIMESTAMP - INTERVAL '8 HOURS')
-      - name: reward_entity
+      - name: REWARD_ENTITY
         description: "The asset or named as pool name"
         tests:
           - not_null  
-      - name: rune_amount
+      - name: RUNE_AMOUNT
         description: "The rewards measured in RUNE amount"
         tests:
           - not_null     
-      - name: rune_amount_usd
+      - name: RUNE_AMOUNT_USD
         description: "The rewards measured in RUNE amount in the USD"
     tests:
       - dbt_constraints.primary_key:

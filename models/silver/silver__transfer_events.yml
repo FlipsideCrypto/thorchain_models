@@ -11,9 +11,9 @@ models:
       - name: AMOUNT_E8
         tests:
           - not_null
-      - name: FROM_ADDR
+      - name: FROM_ADDRESS
         tests:
           - not_null
-      - name: TO_ADDR
+      - name: TO_ADDRESS
         tests:
           - not_null

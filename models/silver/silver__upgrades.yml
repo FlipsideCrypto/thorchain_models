@@ -1,0 +1,47 @@
+version: 2
+models:
+  - name: silver__upgrades
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - TX_ID
+            - BLOCK_TIMESTAMP
+            - FROM_ADDRESS
+            - TO_ADDRESS
+            - BURN_ASSET
+    columns:
+      - name: BLOCK_TIMESTAMP
+        tests:
+          - not_null
+          - dbt_expectations.expect_row_values_to_have_recent_data:
+              datepart: day
+              interval: 1
+      - name: BLOCK_ID
+        tests:
+          - not_null
+      - name: FROM_ADDRESS
+        tests:
+          - not_null
+      - name: ASSET
+      - name: TO_ADDRESS
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_match_regex:
+              regex: thor[0-9a-zA-Z]{39}
+      - name: BURN_ASSET
+        tests:
+          - not_null
+      - name: RUNE_AMOUNT
+        tests:
+          - not_null
+      - name: RUNE_AMOUNT_USD
+        tests:
+          - not_null:
+              where: BLOCK_TIMESTAMP <= current_date -2 AND BLOCK_TIMESTAMP >= '2021-04-13'
+      - name: MINT_AMOUNT
+        tests:
+          - not_null
+      - name: MINT_AMOUNT_USD
+        tests:
+          - not_null:
+              where: BLOCK_TIMESTAMP <= current_date -2 AND BLOCK_TIMESTAMP >= '2021-04-13'
