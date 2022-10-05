@@ -15,14 +15,16 @@ WITH all_block_id AS (
 
 {% if is_incremental() %}
 WHERE
-  _inserted_timestamp :: DATE >= (
+  TO_TIMESTAMP(
+    block_timestamp / 1000000000
+  ) :: DATE >= (
     SELECT
       MAX(
-        _inserted_timestamp
+        DAY
       )
     FROM
       {{ this }}
-  )
+  ) - INTERVAL '48 HOURS'
 {% endif %}
 GROUP BY
   block_timestamp
@@ -42,14 +44,16 @@ avg_nodes_tbl AS (
 
 {% if is_incremental() %}
 WHERE
-  _inserted_timestamp :: DATE >= (
+  TO_TIMESTAMP(
+    block_timestamp / 1000000000
+  ) :: DATE >= (
     SELECT
       MAX(
-        _inserted_timestamp
+        DAY
       )
     FROM
       {{ this }}
-  ) - INTERVAL '4 HOURS'
+  ) - INTERVAL '48 HOURS'
 {% endif %}
 GROUP BY
   block_timestamp
@@ -97,14 +101,14 @@ liquidity_fee_tbl AS (
 
 {% if is_incremental() %}
 WHERE
-  A._inserted_timestamp :: DATE >= (
+  b.block_timestamp :: DATE >= (
     SELECT
       MAX(
-        _inserted_timestamp
+        DAY
       )
     FROM
       {{ this }}
-  ) - INTERVAL '4 HOURS'
+  ) - INTERVAL '48 HOURS'
 {% endif %}
 GROUP BY
   1
@@ -123,14 +127,14 @@ bond_earnings_tbl AS (
 
 {% if is_incremental() %}
 WHERE
-  A._inserted_timestamp :: DATE >= (
+  b.block_timestamp :: DATE >= (
     SELECT
       MAX(
-        _inserted_timestamp
+        DAY
       )
     FROM
       {{ this }}
-  ) - INTERVAL '4 HOURS'
+  ) - INTERVAL '48 HOURS'
 {% endif %}
 GROUP BY
   DAY
@@ -149,14 +153,14 @@ total_pool_rewards_tbl AS (
 
 {% if is_incremental() %}
 WHERE
-  A._inserted_timestamp :: DATE >= (
+  b.block_timestamp :: DATE >= (
     SELECT
       MAX(
-        _inserted_timestamp
+        DAY
       )
     FROM
       {{ this }}
-  ) - INTERVAL '4 HOURS'
+  ) - INTERVAL '48 HOURS'
 {% endif %}
 GROUP BY
   DAY

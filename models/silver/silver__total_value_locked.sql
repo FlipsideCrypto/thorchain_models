@@ -24,14 +24,14 @@ WITH bond_type_day AS (
 
 {% if is_incremental() %}
 WHERE
-  A._inserted_timestamp >= (
+  b.block_timestamp :: DATE >= (
     SELECT
       MAX(
-        _inserted_timestamp
+        DAY
       )
     FROM
       {{ this }}
-  ) - INTERVAL '4 HOURS'
+  ) - INTERVAL '48 HOURS'
 {% endif %}
 GROUP BY
   DAY,
@@ -83,14 +83,14 @@ total_pool_depth AS (
 
 {% if is_incremental() %}
 WHERE
-  A._inserted_timestamp >= (
+  b.block_timestamp :: DATE >= (
     SELECT
       MAX(
-        _inserted_timestamp
+        DAY
       )
     FROM
       {{ this }}
-  )
+  ) - INTERVAL '48 HOURS'
 {% endif %}
 ),
 total_pool_depth_max AS (
