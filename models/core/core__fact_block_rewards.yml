@@ -38,9 +38,6 @@ models:
           - not_null 
       - name: AVG_NODE_COUNT
         description: "The summarized average node operators number within this day"
-        tests:
-          - not_null:
-              where: DAY < CURRENT_DATE - 2
     tests:
       - dbt_constraints.primary_key:
           column_name: FACT_BLOCK_REWARDS_ID
