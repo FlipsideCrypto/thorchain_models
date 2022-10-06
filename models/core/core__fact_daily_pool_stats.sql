@@ -53,7 +53,7 @@ WITH base AS (
 
 {% if is_incremental() %}
 WHERE
-  DAY :: DATE >= (
+  DAY >= (
     SELECT
       MAX(
         DAY
