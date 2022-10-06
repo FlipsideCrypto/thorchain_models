@@ -19,14 +19,14 @@ WITH base AS (
 
 {% if is_incremental() %}
 WHERE
-  DAY >= (
+  _inserted_timestamp >= (
     SELECT
       MAX(
-        DAY
+        _inserted_timestamp
       )
     FROM
       {{ this }}
-  ) - INTERVAL '48 HOURS'
+  ) - INTERVAL '4 HOURS'
 {% endif %}
 )
 SELECT

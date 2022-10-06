@@ -29,4 +29,5 @@ models:
           - not_null
       - name: AVG_NODE_COUNT
         tests:
-          - not_null
+          - not_null:
+              where: DAY < CURRENT_DATE - 2
