@@ -27,6 +27,14 @@ WHERE
     FROM
       {{ this }}
   ) - INTERVAL '4 HOURS'
+  OR pool_name IN (
+    SELECT
+      pool_name
+    FROM
+      {{ this }}
+    WHERE
+      dim_block_id = '-1'
+  )
 {% endif %}
 )
 SELECT

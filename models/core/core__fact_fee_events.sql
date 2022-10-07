@@ -28,6 +28,14 @@ WHERE
     FROM
       {{ this }}
   ) - INTERVAL '4 HOURS'
+  OR tx_id IN (
+    SELECT
+      tx_id
+    FROM
+      {{ this }}
+    WHERE
+      dim_block_id = '-1'
+  )
 {% endif %}
 )
 SELECT

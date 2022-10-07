@@ -25,6 +25,14 @@ WHERE
     FROM
       {{ this }}
   ) - INTERVAL '4 HOURS'
+  OR add_asgard_addr IN (
+    SELECT
+      add_asgard_addr
+    FROM
+      {{ this }}
+    WHERE
+      dim_block_id = '-1'
+  )
 {% endif %}
 )
 SELECT

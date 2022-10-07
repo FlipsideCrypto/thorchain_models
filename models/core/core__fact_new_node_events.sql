@@ -25,6 +25,14 @@ WHERE
     FROM
       {{ this }}
   ) - INTERVAL '4 HOURS'
+  OR node_address IN (
+    SELECT
+      node_address
+    FROM
+      {{ this }}
+    WHERE
+      dim_block_id = '-1'
+  )
 {% endif %}
 )
 SELECT
