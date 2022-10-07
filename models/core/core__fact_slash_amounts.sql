@@ -1,8 +1,5 @@
 {{ config(
-  materialized = 'incremental',
-  unique_key = 'fact_slash_amounts_id',
-  incremental_strategy = 'merge',
-  cluster_by = ['block_timestamp::DATE']
+  materialized = 'view',
 ) }}
 
 WITH base AS (

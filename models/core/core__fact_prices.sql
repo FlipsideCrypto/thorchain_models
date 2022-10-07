@@ -21,7 +21,7 @@ WITH base AS (
 
 {% if is_incremental() %}
 WHERE
-  block_timestamp :: DATE >= CURRENT_DATE -2
+  block_timestamp :: DATE >= CURRENT_DATE -5
 {% endif %}
 )
 SELECT

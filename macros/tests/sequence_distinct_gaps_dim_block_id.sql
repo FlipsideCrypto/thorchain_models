@@ -26,6 +26,7 @@
                     ON A.dim_block_id = b.dim_block_id
                 WHERE
                     A.dim_block_id <> '-1'
+                    AND b.block_timestamp :: DATE < CURRENT_DATE
             )
     )
 SELECT

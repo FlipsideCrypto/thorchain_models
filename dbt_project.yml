@@ -40,5 +40,5 @@ models:
 vars:
   "dbt_date:time_zone": GMT
 
-  tests:
+tests:
   +store_failures: true # all tests
