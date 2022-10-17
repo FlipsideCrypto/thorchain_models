@@ -17,13 +17,9 @@ WITH base AS (
     registration_fee_e8,
     event_id,
     block_timestamp,
-    DATEADD(
-      ms,
-      __HEVO__LOADED_AT,
-      '1970-01-01'
-    ) AS _INSERTED_TIMESTAMP
+    _INSERTED_TIMESTAMP
   FROM
-    {{ ref('bronze__thorname_change_events') }}
+    {{ ref('silver__thorname_change_events') }}
 
 {% if is_incremental() %}
 WHERE
