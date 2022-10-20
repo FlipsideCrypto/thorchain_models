@@ -13,9 +13,6 @@ models:
         tests:
           - not_null   
           - unique 
-          - dbt_expectations.expect_row_values_to_have_recent_data:
-              datepart: day
-              interval: 1
       - name: LIQUIDITY_FEE
         description: "The summarized liquidity cost fee within this day"
         tests:

@@ -40,14 +40,28 @@ FROM
 
 {% if is_incremental() %}
 WHERE
-  ree._INSERTED_TIMESTAMP :: DATE >= (
-    SELECT
-      MAX(
-        _INSERTED_TIMESTAMP
-      )
-    FROM
-      {{ this }}
-  ) - INTERVAL '4 HOURS'
+  (
+    ree._INSERTED_TIMESTAMP :: DATE >= (
+      SELECT
+        MAX(
+          _INSERTED_TIMESTAMP
+        )
+      FROM
+        {{ this }}
+    ) - INTERVAL '4 HOURS'
+    OR concat_ws(
+      '-',
+      b.height,
+      reward_entity
+    ) IN (
+      SELECT
+        _unique_key
+      FROM
+        {{ this }}
+      WHERE
+        rune_amount_USD IS NULL
+    )
+  )
 {% endif %}
 UNION
 SELECT
@@ -79,12 +93,26 @@ FROM
 
 {% if is_incremental() %}
 WHERE
-  re._INSERTED_TIMESTAMP :: DATE >= (
-    SELECT
-      MAX(
-        _INSERTED_TIMESTAMP
-      )
-    FROM
-      {{ this }}
-  ) - INTERVAL '4 HOURS'
+  (
+    re._INSERTED_TIMESTAMP :: DATE >= (
+      SELECT
+        MAX(
+          _INSERTED_TIMESTAMP
+        )
+      FROM
+        {{ this }}
+    ) - INTERVAL '4 HOURS'
+    OR concat_ws(
+      '-',
+      b.height,
+      reward_entity
+    ) IN (
+      SELECT
+        _unique_key
+      FROM
+        {{ this }}
+      WHERE
+        rune_amount_USD IS NULL
+    )
+  )
 {% endif %}

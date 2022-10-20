@@ -15,3 +15,6 @@ SELECT
   ) AS _INSERTED_TIMESTAMP
 FROM
   {{ ref('bronze__slash_amounts') }}
+  qualify(ROW_NUMBER() over(PARTITION BY event_id, pool, asset
+ORDER BY
+  __HEVO__INGESTED_AT DESC)) = 1
