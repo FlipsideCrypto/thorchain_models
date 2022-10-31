@@ -1,7 +1,7 @@
 version: 2
 models:
   - name: core__fact_active_vault_events
-    description: "Fatc table containing the events triggered by the churning activities"
+    description: "Fact table containing the events triggered by the churning activities"
     columns:
       - name: FACT_ACTIVE_VAULT_EVENTS_ID
         description: "{{ doc('sk') }}"
