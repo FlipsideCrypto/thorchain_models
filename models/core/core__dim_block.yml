@@ -1,7 +1,7 @@
 version: 2
 models:
   - name: core__dim_block
-    description: "Records of all blocks that have occurred on Algorand, dating back to the genesis block. "
+    description: "Records of all blocks that have occurred on Thorchain, dating back to the genesis block. "
     columns:
       - name: DIM_BLOCK_ID
         description: "{{ doc('sk') }}"
