@@ -8,7 +8,7 @@ sources:
       - name: prices_v2
   - name: thorchain_midgard
     database: flipside_prod_db
-    schema: BRONZE_MIDGARD_2_9_0_20220724
+    schema: BRONZE_MIDGARD_2_10_0
     tables:
       - name: midgard_active_vault_events
       - name: midgard_add_events
