@@ -51,7 +51,7 @@ unstakes AS (
     event_id,
     _inserted_timestamp
   FROM
-    {{ ref('silver__unstake_events') }}
+    {{ ref('silver__withdraw_events') }}
 
 {% if is_incremental() %}
 WHERE

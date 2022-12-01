@@ -130,7 +130,7 @@ withdraw_tbl AS (
     SUM(stake_units) AS withdrawn_stake,
     SUM(imp_loss_protection_e8) AS impermanent_loss_protection_paid
   FROM
-    {{ ref("silver__unstake_events") }} A
+    {{ ref("silver__withdraw_events") }} A
     JOIN {{ ref('silver__block_log') }}
     b
     ON A.block_timestamp = b.timestamp
@@ -385,7 +385,7 @@ unstake_umc AS (
     pool_name,
     SUM(stake_units) AS unstake_liquidity_units
   FROM
-    {{ ref("silver__unstake_events") }} A
+    {{ ref("silver__withdraw_events") }} A
     JOIN {{ ref('silver__block_log') }}
     b
     ON A.block_timestamp = b.timestamp

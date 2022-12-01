@@ -48,6 +48,7 @@ sources:
       - name: midgard_unstake_events
       - name: midgard_update_node_account_status_events
       - name: midgard_validator_request_leave_events
+      - name: midgard_withdraw_events
   - name: crosschain
     database: flipside_prod_db
     schema: silver_crosschain
