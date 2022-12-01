@@ -1,9 +1,9 @@
 version: 2
 models:
-  - name: core__fact_unstake_events
-    description: "Deprecating soon! This table has been renamed/replaced by Fact_withdraw_events"
+  - name: core__fact_withdraw_events
+    description: "Fact table containing all withdraw events"
     columns:
-      - name: FACT_UNSTAKE_EVENTS_ID
+      - name: FACT_WITHDRAW_EVENTS_ID
         description: "{{ doc('sk') }}"
         tests:
           - dbt_expectations.expect_column_to_exist
@@ -78,7 +78,7 @@ models:
           - not_null
     tests:
       - dbt_constraints.primary_key:
-          column_name: FACT_UNSTAKE_EVENTS_ID
+          column_name: FACT_WITHDRAW_EVENTS_ID
       - dbt_constraints.foreign_key:
           fk_column_name: DIM_BLOCK_ID
           pk_table_name: ref('core__dim_block')

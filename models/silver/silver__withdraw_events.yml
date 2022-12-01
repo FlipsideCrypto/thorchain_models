@@ -1,0 +1,63 @@
+version: 2
+models:
+  - name: silver__withdraw_events
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - TX_ID
+            - BLOCKCHAIN
+            - FROM_ADDRESS
+            - TO_ADDRESS
+            - ASSET
+            - MEMO
+            - POOL_NAME
+            - BLOCK_TIMESTAMP
+    columns:
+      - name: TX_ID
+        tests:
+          - not_null
+      - name: BLOCKCHAIN
+        tests:
+          - not_null
+      - name: FROM_ADDRESS
+        tests:
+          - not_null
+      - name: TO_ADDRESS
+        tests:
+          - not_null
+      - name: ASSET
+        tests:
+          - not_null
+      - name: ASSET_E8
+        tests:
+          - not_null
+      - name: EMIT_ASSET_E8
+        tests:
+          - not_null
+      - name: EMIT_RUNE_E8
+        tests:
+          - not_null
+      - name: MEMO
+        tests:
+          - not_null
+      - name: POOL_NAME
+        tests:
+          - not_null
+      - name: STAKE_UNITS
+        tests:
+          - not_null
+      - name: BASIS_POINTS
+        tests:
+          - not_null
+      - name: ASYMMETRY
+        tests:
+          - not_null
+      - name: IMP_LOSS_PROTECTION_E8
+        tests:
+          - not_null
+      - name: _EMIT_ASSET_IN_RUNE_E8
+        tests:
+          - not_null
+      - name: BLOCK_TIMESTAMP
+        tests:
+          - not_null
